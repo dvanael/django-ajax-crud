@@ -1,0 +1,19 @@
+<form method="post" action="{% url 'js-update' form.instance.pk %}" class="js-update-form">
+  {% csrf_token %}
+
+  <div class="modal-header">
+      <h4 class="modal-title">EDITAR SOLICITAÇÃO</h4>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+
+  <div class="modal-body">
+      <strong class="text-info ">{{form.instance}}</strong>  
+      <p class='lead'> Preencha todos os campos obrigatórios.</p>
+      {{ form.as_p }}
+  </div>
+
+  <div class="modal-footer">
+      <button type="submit" class="btn btn-primary disable-after-submit">Salvar</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+  </div>
+</form>

@@ -1,0 +1,10 @@
+{% for object in status %}
+<tr>
+  <th>{{object.pk}}</th>
+  <th>{{object.name}}</th>
+  <th>
+    <a class="js-update" data-url="{% url 'js-update-status' object.pk %}">Editar</a>
+    <a class="js-delete" data-url="{% url 'js-delete-status' object.pk %}">Excluir</a>
+  </th>
+</tr>
+{% endfor %}

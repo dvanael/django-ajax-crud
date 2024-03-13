@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock title %}
+{% block content %}
+<h1>index</h1>
+<a href="{% url "request-list" %}">Lista solici</a>
+<a href="{% url "status-list" %}">Lista status</a>
+
+{% endblock content %}
