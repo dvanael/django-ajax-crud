@@ -8,4 +8,4 @@ Templates examples in ``/templates``.
 
 Default js archive for use in ``static/js/event.js``
 
-# (WIP)
+# ⚠️ WIP
