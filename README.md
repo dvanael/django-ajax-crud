@@ -1,6 +1,6 @@
 # DJANGO CLASS BASED VIEWS WITH JSON RESPONSE
 
-Acsss ``utils.py`` to see how the classes works. 
+Access ``utils.py`` to see how the classes works. 
 
 How to use examplas in ``views.py``.
 
