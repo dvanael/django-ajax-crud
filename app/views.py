@@ -6,69 +6,41 @@ from .utils import *
 
 # Create your views here.
 def index(request):
-  return render(request, 'index.html')
+    return render(request, 'index.html')
 
-def request_list(request):
-  usages = UsageRequest.objects.all()
-  paginator = Paginator(usages, 7)
-  page_num = request.GET.get('page')
-  page = paginator.get_page(page_num)
-  context = {
-    'object_list': page,
-    'page': page,
-    }
-  return render(request, 'request/request-list.html', context)
+# Book's CRUD
+class BookList(JsonListView):
+    template_name = 'book/book-list.html'
+    partial_list = 'partials/book/list.html'
+    model = Book
+    paginate_by = 7
 
-def status_list(request):
-  status = Status.objects.all()
-  paginator = Paginator(status, 5)
-  page_num = request.GET.get('page')
-  page = paginator.get_page(page_num)
-  context = {
-    'status': page,
-    'page': page,
-    }
-  return render(request, 'status/status-list.html', context)
-
-class ReservationCreate(JsonCreateView):
-  template_name = 'partials/request/create.html'
-  partial_list = 'partials/request/list.html'
-  model = UsageRequest
-  form_class = UsageRequestForm
-  paginate_by = 7
-  
-class ReservationUpdate(JsonUpdateView):
-  template_name = 'partials/request/update.html'
-  partial_list = 'partials/request/list.html'
-  model = UsageRequest
-  form_class = UsageRequestForm
-  paginate_by = 7
-
-class ResevertionDelete(JsonDeleteView):
-  template_name = 'partials/request/delete.html'
-  partial_list = 'partials/request/list.html'
-  model = UsageRequest
-  form_class = UsageRequestForm
-  paginate_by = 7
-
-class StatusCreate(JsonCreateView):
-    template_name = 'partials/status/create.html'
-    partial_list = 'partials/status/list.html'
-    model = Status
-    form_class = StatusForm
-    paginate_by = 5
-    object_list = 'status'
-
-class StatusUpdate(JsonUpdateView):
-    template_name = 'partials/status/update.html'
-    partial_list = 'partials/status/list.html'
-    model = Status
-    form_class = StatusForm
-    paginate_by = 5
-
-class StatusDelete(JsonDeleteView):
-    template_name = 'partials/status/delete.html'
-    partial_list = 'partials/status/list.html'
-    model = Status
-    paginate_by = 5
+class BookCreate(JsonCreateView, BookList):
+    template_name = 'partials/book/create.html'
+    form_class = BookForm
     
+class BookUpdate(JsonUpdateView, BookList):
+    template_name = 'partials/book/update.html'
+    form_class = BookForm
+
+class BookDelete(JsonDeleteView, BookList):
+    template_name = 'partials/book/delete.html'
+ 
+# Genre's CRUD
+class GenreList(JsonListView):
+    template_name = 'genre/genre-list.html'
+    partial_list = 'partials/genre/list.html'
+    model = Genre
+    paginate_by = 5
+    object_list = 'genre'
+
+class GenreCreate(JsonCreateView, GenreList):
+    template_name = 'partials/genre/create.html'
+    form_class = GenreForm
+
+class GenreUpdate(JsonUpdateView, GenreList):
+    template_name = 'partials/genre/update.html'
+    form_class = GenreForm
+
+class GenreDelete(JsonDeleteView, GenreList):
+    template_name = 'partials/genre/delete.html'

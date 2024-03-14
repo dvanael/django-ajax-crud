@@ -1,13 +1,17 @@
 from django import forms
 from .models import *
 
-class UsageRequestForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
   class Meta:
-    model = UsageRequest
-    fields = ('justification', 'date', 'entry_time', 'exit_time')
+    model = Book
+    fields = ('name', 'genre')
 
-class StatusForm(forms.ModelForm):
-    
+class GenreForm(forms.ModelForm):
     class Meta:
-        model = Status
+        model = Genre
         fields = ('__all__')
+
+class AvailabilityForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ('availability',)

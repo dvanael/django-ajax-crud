@@ -2,28 +2,29 @@ from django.db import models
 from django.utils import timezone
 from datetime import date
 
-class Status(models.Model):
+class Genre(models.Model):
   name = models.CharField(max_length=15)
 
   class Meta:
-      verbose_name = ("Status")
-      verbose_name_plural = ("Status")
-
+    verbose_name = ("Genre")
+    ordering = ['-pk']
+    
   def __str__(self):
-      return self.name
+    return self.name
 
-class UsageRequest(models.Model):
-  status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name="status", to_field='id', default='1')
-  justification = models.CharField(default="" ,max_length=150)
-  entry_time = models.TimeField(default=timezone.now)
-  exit_time = models.TimeField(default=timezone.now)
-  date = models.DateField(default=date.today)
-  timestamp = models.DateTimeField(auto_now=True)
+class Book(models.Model):
+    CHOICES = [
+        ('available', 'Available'),
+        ('borrowed', 'Borrowed'),
+    ]
 
-  class Meta:
-      verbose_name = ("Usage Request")
-      verbose_name_plural = ("Usage Requests")
-      ordering = ['-timestamp']
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    name = models.CharField(default="", max_length=150)
+    availability = models.CharField(max_length=20, choices=CHOICES, default='available')
+    timestamp = models.DateTimeField(auto_now=True)
 
-  def __str__(self):
-      return f"Solicitação {self.status} - {self.date}"
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return self.name

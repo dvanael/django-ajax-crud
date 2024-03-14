@@ -4,13 +4,13 @@ from .views import *
 urlpatterns = [
   path('', index, name='index'),
   
-  path('list/', request_list, name='request-list'),
-  path('js/criar/', ReservationCreate.as_view(), name='js-create'),
-  path('js/editar/<int:pk>/', ReservationUpdate.as_view(), name='js-update'),
-  path('js/excluir/<int:pk>/', ResevertionDelete.as_view(), name='js-delete'),
+  path('books/', BookList.as_view(), name='book-list'),
+  path('js/create/book/', BookCreate.as_view(), name='js-create-book'),
+  path('js/update/<int:pk>/', BookUpdate.as_view(), name='js-update-book'),
+  path('js/delete/<int:pk>/', BookDelete.as_view(), name='js-delete-book'),
 
-  path('list-status/', status_list, name='status-list'),
-  path('js/criar/status/', StatusCreate.as_view(), name='js-create-status'),
-  path('js/editar/<int:pk>/status/', StatusUpdate.as_view(), name='js-update-status'),
-  path('js/deletar/<int:pk>/status/', StatusDelete.as_view(), name='js-delete-status'),
+  path('genres/', GenreList.as_view(), name='genre-list'),
+  path('js/create/genre/', GenreCreate.as_view(), name='js-create-genre'),
+  path('js/update/<int:pk>/genre/', GenreUpdate.as_view(), name='js-update-genre'),
+  path('js/delete/<int:pk>/genre/', GenreDelete.as_view(), name='js-delete-genre'),
 ]

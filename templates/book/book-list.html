@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Book List{% endblock title %}
+{% block content %}
+
+<div class="modal fade" id="modal-form">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+</div>
+
+<div class="container justify-content-center w-75">
+  <div class="d-flex mt-3">
+    <h3>Books</h3>
+    <div class="ms-auto">
+      <button class="js-create btn btn-success" type="button" data-url="{% url 'js-create-book' %}">New Book</button>
+    </div>
+  </div>
+  <hr>
+  <table class="table table-hover mt-3" id="table-json">
+    <thead class="fw-bold text-uppercase">
+      <th>Name</th>
+      <th>Genre</th>
+      <th>Availability</th>
+      <th>Timestamp</th>
+      <th>Options</th>
+    </thead>
+    <tbody>
+      {% include "partials/book/list.html" %}
+    </tbody>
+  </table>
+  
+  {% include "partials/pagination.html" %}
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script src="{% static "js/event.js" %}"></script>
+{% endblock script %}

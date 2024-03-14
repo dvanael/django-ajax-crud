@@ -22,7 +22,7 @@ $(function(){
           dataType: 'json',
           success: function(data){
               if(data.form_is_valid){
-                  $("#table-requests tbody").html(data.html_list);
+                  $("#table-json tbody").html(data.html_list);
                   $("#modal-form").modal("hide");
                   if(data.html_pagination){
                     $("#pagination").html(data.html_pagination);
@@ -41,10 +41,10 @@ $(function(){
   $("#modal-form").on("submit", ".js-create-form", saveForm);
 
   // UPDATE
-  $("#table-requests").on("click", ".js-update", loadForm);
+  $("#table-json").on("click", ".js-update", loadForm);
   $("#modal-form").on("submit", ".js-update-form", saveForm);
 
   // DELETE
-  $("#table-requests").on("click", ".js-delete", loadForm);
+  $("#table-json").on("click", ".js-delete", loadForm);
   $("#modal-form").on("submit", ".js-delete-form", saveForm); 
 });

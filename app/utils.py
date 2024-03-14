@@ -6,14 +6,38 @@ from django.views import View
 from .models import *
 from .forms import *
 
-class FormView(View):
-    template_name = None
-    partial_list = None
-    partial_pagination = 'partials/pagination.html'
-    model = None
+class JsonListView(View):
+  template_name = None
+  partial_list = None
+  partial_pagination = 'partials/pagination.html'
+  model = None
+  paginate_by = None
+  object_list = 'object_list'
+  
+  def get(self, request, *args, **kwargs):
+    object_list = self.model.objects.all()
+
+    if self.paginate_by:
+      paginator = Paginator(object_list, self.paginate_by)
+      page_num = request.GET.get('page')
+      
+      try:
+        object_list = paginator.get_page(page_num)
+      except PageNotAnInteger:
+        object_list = paginator.page(1)
+      except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+
+      context = {
+        'page': object_list,
+        f'{self.object_list}': object_list
+      }
+
+      return render(request, f'{self.template_name}', context)
+      
+
+class FormView(JsonListView):
     form_class = None
-    paginate_by = None
-    object_list = 'object_list'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -80,13 +104,7 @@ class JsonUpdateView(FormView):
         return self.form_valid(request, form)
 
 
-class JsonDeleteView(View):
-    template_name = None
-    partial_list = None
-    partial_pagination = 'partials/pagination.html'
-    model = None
-    paginate_by = None
-    object_list = 'object_list'
+class JsonDeleteView(JsonListView):
 
     def get(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(self.model, pk=pk)

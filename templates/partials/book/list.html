@@ -1,0 +1,12 @@
+{% for object in object_list %}
+  <tr>
+    <th>{{object.name}}</th>
+    <th>{{object.genre}}</th>
+    <th>{{object.availability}}</th>
+    <th>{{object.timestamp|date:"SHORT_DATETIME_FORMAT"}}</th>
+    <th>
+      <a class="js-update btn btn-secondary" data-url="{% url 'js-update-book' object.pk %}">Edit</a>
+      <a class="js-delete btn btn-danger" data-url="{% url 'js-delete-book' object.pk %}">Delete</a>
+    </th>
+  </tr>
+{% endfor %}
