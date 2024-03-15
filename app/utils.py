@@ -7,34 +7,36 @@ from .models import *
 from .forms import *
 
 class JsonListView(View):
-  template_name = None
-  partial_list = None
-  partial_pagination = 'partials/pagination.html'
-  model = None
-  paginate_by = None
-  object_list = 'object_list'
+    template_name = None
+    partial_list = None
+    partial_pagination = 'partials/pagination.html'
+    model = None
+    paginate_by = None
+    object_list = 'object_list'
   
-  def get(self, request, *args, **kwargs):
-    object_list = self.model.objects.all()
+    def get(self, request, *args, **kwargs):
+        object_list = self.model.objects.all()
 
-    if self.paginate_by:
-      paginator = Paginator(object_list, self.paginate_by)
-      page_num = request.GET.get('page')
+        if self.paginate_by:
+            object_list = self.paginate(request, self.paginate_by, object_list)
+            context = {'page': object_list}
+
+        context[f'{self.object_list}'] = object_list
+
+        return render(request, f'{self.template_name}', context)
       
-      try:
-        object_list = paginator.get_page(page_num)
-      except PageNotAnInteger:
-        object_list = paginator.page(1)
-      except EmptyPage:
-        object_list = paginator.page(paginator.num_pages)
+    def paginate(self, request, paginate_by, object_list):
+        paginator = Paginator(object_list, self.paginate_by)
+        page_num = request.GET.get('page')
+        
+        try:
+            object_list = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            object_list = paginator.page(1)
+        except EmptyPage:
+            object_list = paginator.page(paginator.num_pages)
 
-      context = {
-        'page': object_list,
-        f'{self.object_list}': object_list
-      }
-
-      return render(request, f'{self.template_name}', context)
-      
+        return object_list
 
 class FormView(JsonListView):
     form_class = None
@@ -54,19 +56,12 @@ class FormView(JsonListView):
             data['form_is_valid'] = True
 
             object_list = self.model.objects.all()
-
+            
             if self.paginate_by:
-              paginator = Paginator(object_list, self.paginate_by)
-              page_num = request.GET.get('page')
+                object_list = self.paginate(request, self.paginate_by, object_list)
+                context = {'page': object_list}
 
-              try:
-                  object_list = paginator.get_page(page_num)
-              except PageNotAnInteger:
-                  object_list = paginator.page(1)
-              except EmptyPage:
-                  object_list = paginator.page(paginator.num_pages)
-
-              data['html_pagination'] = render_to_string(f'{self.partial_pagination}', {'page': object_list})
+                data['html_pagination'] = render_to_string(f'{self.partial_pagination}', context)
 
             data['html_list'] = render_to_string(self.partial_list, {f'{self.object_list}': object_list})
         else:
@@ -119,19 +114,12 @@ class JsonDeleteView(JsonListView):
         data = {'form_is_valid': True}
 
         object_list = self.model.objects.all()
-
+            
         if self.paginate_by:
-            paginator = Paginator(object_list, self.paginate_by)
-            page_num = request.GET.get('page')
+            object_list = self.paginate(request, self.paginate_by, object_list)
+            context = {'page': object_list}
 
-            try:
-                object_list = paginator.get_page(page_num)
-            except PageNotAnInteger:
-                object_list = paginator.page(1)
-            except EmptyPage:
-                object_list = paginator.page(paginator.num_pages)
-
-            data['html_pagination'] = render_to_string(f'{self.partial_pagination}', {'page': object_list})
+            data['html_pagination'] = render_to_string(f'{self.partial_pagination}', context)
 
         data['html_list'] = render_to_string(self.partial_list, {f'{self.object_list}': object_list})
 
