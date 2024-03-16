@@ -1,8 +1,8 @@
 # DJANGO CLASS BASED VIEWS WITH JSON RESPONSE
 
-Access ``utils.py`` to see how the classes works. 
+Access ``poggers/utils.py`` to see how the classes works. 
 
-How to use examplas in ``views.py``.
+How to use examplas in ``app/views.py``.
 
 Templates examples in ``/templates``.
 
