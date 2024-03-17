@@ -11,7 +11,14 @@
   </div>
 </div>
 
-<div class="container justify-content-center w-75">
+<div class="container justify-content-center">
+
+  <form id="filter-form" action="?" method="GET">
+    <div class="d-md-flex mt-3">
+      <input class="search" type="text" name="search" value="{{name}}" placeholder="Search...">
+
+    </div>
+  </form>
   <div class="d-flex mt-3">
     <h3>Genres</h3>
     <button class="js-create btn btn-success ms-auto" type="button" data-url="{% url 'js-create-genre' %}">New Genre</button>
@@ -23,7 +30,7 @@
       <th>Name</th>
       <th>Options</th>
     </thead>
-    <tbody>
+    <tbody style="height: 40vh;">
       {% include "partials/genre/list.html" %}
     </tbody>
   </table>

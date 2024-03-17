@@ -13,17 +13,36 @@ class JsonListView(View):
     model = None
     paginate_by = None
     object_list = 'object_list'
-  
+    
     def get(self, request, *args, **kwargs):
-        object_list = self.model.objects.all()
-
-        if self.paginate_by:
-            object_list = self.paginate(request, self.paginate_by, object_list)
-            context = {'page': object_list}
+        object_list = self.get_queryset()
+        context = self.get_context()
 
         context[f'{self.object_list}'] = object_list
+        
+        if self.paginate_by:
+            object_list = self.paginate(request, self.paginate_by, object_list)
+            
+            context.update({
+                'page': object_list,
+                f'{self.object_list}': object_list,
+            })
 
-        return render(request, f'{self.template_name}', context)
+            data = {
+                'html_list': render_to_string(self.partial_list, {f'{self.object_list}': object_list}),
+                'html_pagination': render_to_string(self.partial_pagination, context)
+            }
+        else:
+            data = {
+                'html_list': render_to_string(self.partial_list, {f'{self.object_list}': object_list})
+            }
+
+        # Verifica se o cabeçalho está presente na requisição
+        if request.headers.get('header') == 'XMLHttpRequest':
+            return JsonResponse(data)
+        else:
+            # Caso contrário, retorne a resposta como uma renderização de template
+            return render(request, self.template_name, context)
       
     def paginate(self, request, paginate_by, object_list):
         paginator = Paginator(object_list, self.paginate_by)
@@ -37,6 +56,14 @@ class JsonListView(View):
             object_list = paginator.page(paginator.num_pages)
 
         return object_list
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        return queryset
+
+    def get_context(self):
+        context = {}
+        return context
 
 class FormView(JsonListView):
     form_class = None

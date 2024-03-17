@@ -11,7 +11,26 @@
   </div>
 </div>
 
-<div class="container justify-content-center w-75">
+<div class="container justify-content-center">
+
+  <form id="filter-form" action="?" method="GET">
+    <div class="d-md-flex mt-3">
+      <input class="search" type="text" name="search" value="{{name}}" placeholder="Search...">
+  
+      <select class="form-select w-25" name="genre"> 
+        <option value="">All Genres</option>
+        {% for genre in genres %}
+            <option value="{{genre.name}}"
+              {% if request.GET.genre == genre.name %}selected{% endif %}>
+                {{genre.name}}
+              </option>
+        {% endfor %}
+      </select>
+      <input class="btn btn-secondary" type="reset" value="Clear"> 
+
+    </div>
+  </form>
+  
   <div class="d-flex mt-3">
     <h3>Books</h3>
     <div class="ms-auto">
@@ -27,7 +46,7 @@
       <th>Timestamp</th>
       <th>Options</th>
     </thead>
-    <tbody>
+    <tbody  style="height: 40vh;">
       {% include "partials/book/list.html" %}
     </tbody>
   </table>

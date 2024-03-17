@@ -14,10 +14,41 @@ class BookList(JsonListView):
     partial_list = 'partials/book/list.html'
     model = Book
     paginate_by = 7
+    
+    def get_queryset(self):
+        queryset = Book.objects.all()
+        
+        genre = self.request.GET.get('genre', '')
+        if genre:
+            queryset = queryset.filter(genre__name__icontains=genre)
+
+        name = self.request.GET.get('search', '')    
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset
+
+    def get_context(self):
+        gernes = Genre.objects.all()
+        genre = self.request.GET.get('genre', '')
+        name = self.request.GET.get('search', '')
+        
+        context = {
+            'name': name,
+            'genres': gernes,
+            'gerne': genre,
+        }
+        
+        if self.paginate_by:
+            context.update({
+                'filter': f'&search={name}&genre={genre}'
+            })
+        return context
 
 class BookCreate(JsonCreateView, BookList):
     template_name = 'partials/book/create.html'
     form_class = BookForm
+    
     
 class BookUpdate(JsonUpdateView, BookList):
     template_name = 'partials/book/update.html'
@@ -33,6 +64,26 @@ class GenreList(JsonListView):
     model = Genre
     paginate_by = 5
     object_list = 'genre'
+
+    def get_queryset(self):
+        queryset = Genre.objects.all()
+
+        name = self.request.GET.get('search', '')    
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset
+
+    def get_context(self):
+        name = self.request.GET.get('search', '')
+        
+        context = {'name': name}
+        
+        if self.paginate_by:
+            context.update({
+                'filter': f'&search={name}'
+            })
+        return context
 
 class GenreCreate(JsonCreateView, GenreList):
     template_name = 'partials/genre/create.html'
