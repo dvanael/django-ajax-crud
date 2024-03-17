@@ -8,4 +8,10 @@ Templates examples in ``/templates``.
 
 Default js archive for use in ``static/js/event.js``
 
-# ⚠️ WIP
+## HOW TO USE IN YOUR PROJECT
+ Copy the archives
+  - ``app/utils.py``
+
+  - ``static/js/event.js``
+
+Use the JSON classes in your ``views.py``
