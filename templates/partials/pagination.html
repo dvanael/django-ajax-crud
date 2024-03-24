@@ -2,13 +2,13 @@
   <ul class="pagination">
     {% if page.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page.previous_page_number }}{% if filter %}{{filter}}{% endif %}">Previous</a>
+        <a class="js-link page-link" href="?page={{ page.previous_page_number }}{% if filter %}{{filter}}{% endif %}">Previous</a>
       </li>
     {% endif %}
-    <li class="page-item"><a class="page-link text-dark"> Page {{ page.number }} of {{ page.paginator.num_pages }}</a></li>
+    <li class="page-item"><span class="page-link text-dark"> Page {{ page.number }} of {{ page.paginator.num_pages }}</span></li>
     {% if page.has_next %}
       <li class="page-item">
-          <a class="page-link" href="?page={{ page.next_page_number }}{% if filter %}{{filter}}{% endif %}">Next</a>
+          <a class="js-link page-link" href="?page={{ page.next_page_number }}{% if filter %}{{filter}}{% endif %}">Next</a>
       </li>
     {% endif %}
   </ul>
