@@ -7,6 +7,10 @@ from .models import *
 from .forms import *
 
 class JsonListView(View):
+    """
+    Base view for returning JSON response for object listing.
+    """
+
     template_name = None
     partial_list = None
     partial_pagination = 'partials/pagination.html'
@@ -15,6 +19,9 @@ class JsonListView(View):
     object_list = 'object_list'
     
     def get(self, request, *args, **kwargs):
+        """
+        GET method to handle object listing request.
+        """
         object_list = self.get_queryset()
         context = self.get_context()
 
@@ -37,14 +44,15 @@ class JsonListView(View):
                 'html_list': render_to_string(self.partial_list, {f'{self.object_list}': object_list})
             }
 
-        # Verifica se o cabeçalho está presente na requisição
         if request.headers.get('header') == 'XMLHttpRequest':
             return JsonResponse(data)
         else:
-            # Caso contrário, retorne a resposta como uma renderização de template
             return render(request, self.template_name, context)
       
     def paginate(self, request, paginate_by, object_list):
+        """
+        Paginate the object list.
+        """
         paginator = Paginator(object_list, self.paginate_by)
         page_num = request.GET.get('page')
         
@@ -58,25 +66,43 @@ class JsonListView(View):
         return object_list
 
     def get_queryset(self):
+        """
+        Return the queryset of objects to be listed.
+        """
         queryset = self.model.objects.all()
         return queryset
 
     def get_context(self):
+        """
+        Return the context to be used in the template.
+        """
         context = {}
         return context
 
 class FormView(JsonListView):
+    """
+    Base view for form processing and returning JSON responses.
+    """
     form_class = None
 
     def get(self, request, *args, **kwargs):
+        """
+        GET method to handle form rendering request.
+        """
         form = self.form_class()
         return self.render_form(request, form)
 
     def post(self, request, *args, **kwargs):
+        """
+        POST method to handle form submission.
+        """
         form = self.form_class(request.POST)
         return self.form_valid(request, form)
 
     def form_valid(self, request, form):
+        """
+        Check if the form is valid and return the appropriate JSON response.
+        """
         data = {}
         if form.is_valid():
             form.save()
@@ -98,6 +124,9 @@ class FormView(JsonListView):
         return JsonResponse(data)
 
     def render_form(self, request, form):
+        """
+        Render the form into a JSON context.
+        """
         data = {}
         context = {'form': form}
         data['html_form'] = render_to_string(self.template_name, context, request=request)
@@ -105,7 +134,9 @@ class FormView(JsonListView):
 
 
 class JsonCreateView(FormView):
-
+    """
+    View to create a new object using AJfAX.
+    """
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -114,7 +145,9 @@ class JsonCreateView(FormView):
 
 
 class JsonUpdateView(FormView):
-
+    """
+    View to update an existing object using AJAX.
+    """
     def get(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(self.model, pk=pk)
         form = self.form_class(instance=instance)
@@ -127,7 +160,9 @@ class JsonUpdateView(FormView):
 
 
 class JsonDeleteView(JsonListView):
-
+    """
+    View to delete an existing object using AJAX.
+    """
     def get(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(self.model, pk=pk)
         data = {'form_is_valid': False}
