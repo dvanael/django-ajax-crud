@@ -11,7 +11,7 @@ class GenreForm(forms.ModelForm):
         model = Genre
         fields = ('__all__')
 
-class AvailabilityForm(forms.ModelForm):
+class BookStatusForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ('availability',)

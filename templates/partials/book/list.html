@@ -6,6 +6,7 @@
     <th>{{object.timestamp|date:"SHORT_DATETIME_FORMAT"}}</th>
     <th>
       <a class="js-update btn btn-secondary" data-url="{% url 'js-update-book' object.pk %}">Edit</a>
+      <a class="js-update btn btn-info" data-url="{% url 'js-update-status-book' object.pk %}">Status</a>
       <a class="js-delete btn btn-danger" data-url="{% url 'js-delete-book' object.pk %}">Delete</a>
     </th>
   </tr>

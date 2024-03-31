@@ -91,6 +91,7 @@ $(function(){
 
     // FILTER
     $("#filter-form").on("input", filter);
+    $("#filter-form").on("submit", filter);
     $('#filter-form').on("reset", function() { filter($(this)) });
 
 });

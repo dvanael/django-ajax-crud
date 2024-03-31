@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import *
 from .models import *
 from .forms import *
-from .utils import *
+from .ajax import *
 
 # Create your views here.
 def index(request):
@@ -10,7 +10,7 @@ def index(request):
 
 # Book's CRUD
 class BookList(JsonListView):
-    template_name = 'book/book-list.html'
+    template_name = 'book/list.html'
     partial_list = 'partials/book/list.html'
     model = Book
     paginate_by = 7
@@ -48,18 +48,27 @@ class BookList(JsonListView):
 class BookCreate(JsonCreateView, BookList):
     template_name = 'partials/book/create.html'
     form_class = BookForm
+
+    def get_instance(self, form):
+        form.instance.user = get_object_or_404(User, id=self.request.user.id) 
+        instance = form.instance
+        return instance
     
     
 class BookUpdate(JsonUpdateView, BookList):
     template_name = 'partials/book/update.html'
     form_class = BookForm
 
+class BookStatusUpdate(JsonUpdateView, BookList):
+    template_name = 'partials/book/update-status.html'
+    form_class = BookStatusForm
+
 class BookDelete(JsonDeleteView, BookList):
     template_name = 'partials/book/delete.html'
  
 # Genre's CRUD
 class GenreList(JsonListView):
-    template_name = 'genre/genre-list.html'
+    template_name = 'genre/list.html'
     partial_list = 'partials/genre/list.html'
     model = Genre
     paginate_by = 5

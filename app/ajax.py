@@ -105,7 +105,9 @@ class FormView(JsonListView):
         """
         data = {}
         if form.is_valid():
-            form.save()
+            instance = self.get_instance(form)
+
+            instance.save()
             data['form_is_valid'] = True
 
             object_list = self.model.objects.all()
@@ -132,10 +134,17 @@ class FormView(JsonListView):
         data['html_form'] = render_to_string(self.template_name, context, request=request)
         return JsonResponse(data)
 
+    def get_instance(self, form):
+        """
+        Return the instance associated with the form.
+        """
+        instance = form.instance
+        return instance
+
 
 class JsonCreateView(FormView):
     """
-    View to create a new object using AJfAX.
+    View to create a new object using AJAX.
     """
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
