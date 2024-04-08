@@ -28,8 +28,10 @@ $(function(){
                     if(data.html_pagination){
                         $("#page-json").html(data.html_pagination);
                     }
-                    $('#filter-form')[0].reset();
-                    filter($('#filter-form'));
+                    if ($('#filter-form').length > 0){
+                        $('#filter-form')[0].reset()
+                        filter($('#filter-form'))
+                    }
                 }
                 else{
                     $("#modal-form .modal-content").html(data.html_form)
@@ -46,8 +48,9 @@ $(function(){
             data: form.serialize(),
             type: form.attr("method"),
             dataType: 'json',
-            headers:{ 'header': 'XMLHttpRequest'},
+            headers:{ 'header': 'ajax'},
             success: function(data){
+                console.log(data.html_list)
                 $('#table-json tbody').html(data.html_list);
                 if (data.html_pagination){
                     $('#page-json').html(data.html_pagination);
@@ -58,12 +61,12 @@ $(function(){
     }
 
     var paginatation = function(){
-        var url = $(this).attr("href");
+        var url = $(this).attr("data-url");
         $.ajax({
             url: url,
             type: 'get',
             dataType: 'json',    
-            headers: {'header': 'XMLHttpRequest'},
+            headers: {'header': 'ajax'},
             success: function(data){
                 $("#table-json tbody").html(data.html_list);
                 if(data.html_pagination){
@@ -92,6 +95,11 @@ $(function(){
     // FILTER
     $("#filter-form").on("input", filter);
     $("#filter-form").on("submit", filter);
-    $('#filter-form').on("reset", function() { filter($(this)) });
+
+    // BTN RESET FILTER 
+    $('.btn-reset').on("click", function() {
+        $('#filter-form')[0].reset()
+        filter($('#filter-form'))
+    });
 
 });

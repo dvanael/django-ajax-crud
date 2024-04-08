@@ -1,20 +1,23 @@
-from django.shortcuts import render
-from django.core.paginator import *
-from .models import *
-from .forms import *
-from .ajax import *
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+
+from .ajax import AjaxListView, AjaxCreateView, AjaxUpdateView, AjaxDeleteView
+from .forms import BookForm, BookStatusForm, GenreForm
+from .models import Book, Genre
 
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
 
 # Book's CRUD
-class BookList(JsonListView):
+class BookMixin:
     template_name = 'book/list.html'
     partial_list = 'partials/book/list.html'
     model = Book
     paginate_by = 7
-    
+
+class BookList(BookMixin, AjaxListView):
+
     def get_queryset(self):
         queryset = Book.objects.all()
         
@@ -45,34 +48,34 @@ class BookList(JsonListView):
             })
         return context
 
-class BookCreate(JsonCreateView, BookList):
+class BookCreate(BookMixin, AjaxCreateView):
     template_name = 'partials/book/create.html'
     form_class = BookForm
 
-    def get_instance(self, form):
+    def save_form(self, form):
         form.instance.user = get_object_or_404(User, id=self.request.user.id) 
-        instance = form.instance
-        return instance
+        return super().save_form(form)
     
-    
-class BookUpdate(JsonUpdateView, BookList):
+class BookUpdate(BookMixin, AjaxUpdateView):
     template_name = 'partials/book/update.html'
     form_class = BookForm
 
-class BookStatusUpdate(JsonUpdateView, BookList):
+class BookStatusUpdate(BookMixin, AjaxUpdateView):
     template_name = 'partials/book/update-status.html'
     form_class = BookStatusForm
 
-class BookDelete(JsonDeleteView, BookList):
+class BookDelete(BookMixin, AjaxDeleteView):
     template_name = 'partials/book/delete.html'
  
 # Genre's CRUD
-class GenreList(JsonListView):
+class GenreMixin:
     template_name = 'genre/list.html'
     partial_list = 'partials/genre/list.html'
     model = Genre
     paginate_by = 5
     object_list = 'genre'
+
+class GenreList(GenreMixin, AjaxListView):
 
     def get_queryset(self):
         queryset = Genre.objects.all()
@@ -82,7 +85,7 @@ class GenreList(JsonListView):
             queryset = queryset.filter(name__icontains=name)
 
         return queryset
-
+    
     def get_context(self):
         name = self.request.GET.get('search', '')
         
@@ -94,13 +97,13 @@ class GenreList(JsonListView):
             })
         return context
 
-class GenreCreate(JsonCreateView, GenreList):
+class GenreCreate(GenreMixin, AjaxCreateView):
     template_name = 'partials/genre/create.html'
     form_class = GenreForm
 
-class GenreUpdate(JsonUpdateView, GenreList):
+class GenreUpdate(GenreMixin, AjaxUpdateView):
     template_name = 'partials/genre/update.html'
     form_class = GenreForm
 
-class GenreDelete(JsonDeleteView, GenreList):
+class GenreDelete(GenreMixin, AjaxDeleteView):
     template_name = 'partials/genre/delete.html'
