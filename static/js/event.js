@@ -23,10 +23,10 @@ $(function(){
             dataType: 'json',
             success: function(data){
                 if(data.form_is_valid){
-                    $("#table-json tbody").html(data.html_list);
+                    $("#partial-table tbody").html(data.html_list);
                     $("#modal-form").modal("hide");
                     if(data.html_pagination){
-                        $("#page-json").html(data.html_pagination);
+                        $("#partial-page").html(data.html_pagination);
                     }
                     if ($('#filter-form').length > 0){
                         $('#filter-form')[0].reset()
@@ -51,9 +51,9 @@ $(function(){
             headers:{ 'header': 'ajax'},
             success: function(data){
                 console.log(data.html_list)
-                $('#table-json tbody').html(data.html_list);
+                $('#partial-table tbody').html(data.html_list);
                 if (data.html_pagination){
-                    $('#page-json').html(data.html_pagination);
+                    $('#partial-page').html(data.html_pagination);
                 }
             }
         });
@@ -68,9 +68,9 @@ $(function(){
             dataType: 'json',    
             headers: {'header': 'ajax'},
             success: function(data){
-                $("#table-json tbody").html(data.html_list);
+                $("#partial-table tbody").html(data.html_list);
                 if(data.html_pagination){
-                    $("#page-json").html(data.html_pagination);
+                    $("#partial-page").html(data.html_pagination);
                 }
             }
         });
@@ -82,15 +82,15 @@ $(function(){
     $("#modal-form").on("submit", ".js-create-form", saveForm);
 
     // UPDATE
-    $("#table-json").on("click", ".js-update", loadForm);
+    $("#partial-table").on("click", ".js-update", loadForm);
     $("#modal-form").on("submit", ".js-update-form", saveForm);
 
     // DELETE
-    $("#table-json").on("click", ".js-delete", loadForm);
+    $("#partial-table").on("click", ".js-delete", loadForm);
     $("#modal-form").on("submit", ".js-delete-form", saveForm); 
     
     // PAGINATION
-    $("#page-json").on("click", ".js-link", paginatation);
+    $("#partial-page").on("click", ".js-link", paginatation);
 
     // FILTER
     $("#filter-form").on("input", filter);

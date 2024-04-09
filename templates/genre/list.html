@@ -3,7 +3,7 @@
 {% block title %}Genre List{% endblock title %}
 {% block content %}
 
-<div class="modal fade" id="modal-form">
+<div  id="modal-form" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
       
@@ -24,7 +24,7 @@
     <button class="js-create btn btn-success ms-auto" type="button" data-url="{% url 'js-create-genre' %}">New Genre</button>
   </div>
   <hr>
-  <table class="table table-hover mt-3" id="table-json">
+  <table id="partial-table" class="table table-hover mt-3">
     <thead class="fw-bold text-uppercase">
       <th>N°</th>
       <th>Name</th>

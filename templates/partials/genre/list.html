@@ -3,8 +3,8 @@
   <th>{{object.pk}}</th>
   <th>{{object.name}}</th>
   <th>
-    <a class="js-update btn btn-secondary" data-url="{% url 'js-update-genre' object.pk %}">Edit</a>
-    <a class="js-delete btn btn-danger" data-url="{% url 'js-delete-genre' object.pk %}">Delete</a>
+    <button class="js-update btn btn-secondary" data-url="{% url 'js-update-genre' object.pk %}">Edit</button>
+    <button class="js-delete btn btn-danger" data-url="{% url 'js-delete-genre' object.pk %}">Delete</button>
   </th>
 </tr>
 {% endfor %}

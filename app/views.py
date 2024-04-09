@@ -11,12 +11,12 @@ def index(request):
 
 # Book's CRUD
 class BookMixin:
-    template_name = 'book/list.html'
-    partial_list = 'partials/book/list.html'
     model = Book
     paginate_by = 7
+    partial_list = 'partials/book/list.html'
 
 class BookList(BookMixin, AjaxListView):
+    template_name = 'book/list.html'
 
     def get_queryset(self):
         queryset = Book.objects.all()
@@ -52,9 +52,9 @@ class BookCreate(BookMixin, AjaxCreateView):
     template_name = 'partials/book/create.html'
     form_class = BookForm
 
-    def save_form(self, form):
+    def form_valid(self, form):
         form.instance.user = get_object_or_404(User, id=self.request.user.id) 
-        return super().save_form(form)
+        return super().form_valid(form)
     
 class BookUpdate(BookMixin, AjaxUpdateView):
     template_name = 'partials/book/update.html'
@@ -69,13 +69,13 @@ class BookDelete(BookMixin, AjaxDeleteView):
  
 # Genre's CRUD
 class GenreMixin:
-    template_name = 'genre/list.html'
-    partial_list = 'partials/genre/list.html'
     model = Genre
-    paginate_by = 5
     object_list = 'genre'
+    paginate_by = 5
+    partial_list = 'partials/genre/list.html'
 
 class GenreList(GenreMixin, AjaxListView):
+    template_name = 'genre/list.html'
 
     def get_queryset(self):
         queryset = Genre.objects.all()
