@@ -1,21 +1,25 @@
 # DJANGO CLASS BASED VIEWS FOR AJAX CRUD
 
-Acess the [Brazilian Portuguese Documentation](docs/README_pt-br.md).
+Access the [Brazilian Portuguese Documentation](docs/README_pt-br.md).
 
-This repository a collection of mixins and class-based views designed for easy AJAX CRUD operations in Django projects. This repository helps developers add dynamic data interactions to their web applications without page reloads, improving user experience.
+This repository was created to address the difficulty of creating Django Function Based Views for CRUD (Create, Read, Update, Delete) operations with AJAX.
+
+It provides mixins and views built with JsonResponse that can be processed by AJAX requests, enabling the integration of dynamic pages into web applications.
 
 ---
 
 **Features:**
 - **AJAX Mixins:** Easily add AJAX to class-based views.
 
-- **CRUD Operations:** Ready-to-use views for creating, reading, updating, and deleting items.
+- **AJAX Views:** Ready-to-use views for CRUD.
+
 - **Simple Integration:** Designed for easy setup and use in any Django project.
+
 - **Documentation:** Includes setup and usage instructions.
 
 ---
 
-**Get Started:** Clone the repository and follow the documentation to add AJAX CRUD to your Django project. Improve your web app's interactivity and performance with our straightforward solution.
+**Get Started:** Clone the repository and follow the documentation to add AJAX CRUD to your Django project. 
 
 ## HOW TO USE
 To incorporate these classes into your Django project, follow these steps:
@@ -36,7 +40,9 @@ Ensure that you have **jQuery** and **Bootstrap 5** included in your `base.html`
 </head>
 ```
 ---
+
 Alternatively, you can add a script block in your `base.html`:
+
 ```html
 <body>
   ...
@@ -55,6 +61,9 @@ Copy the following files of this repository into your project:
 - `static/js/event.js`: Contains AJAX operations for CRUD, pagination, and filtering.
 
 ## LIST VIEW
+
+### Add AjaxListView in views.py 
+
 Utilize a model that you've defined in your project.
 
 In `ModelList`, we define the model, template, and partial template for listing objects. 
@@ -70,7 +79,7 @@ class ModelList(AjaxListView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Add ListView in urls.py
+### Add ModelList in urls.py
 
 In `urls.py`, create paths using the list view you've created.
 
@@ -128,7 +137,8 @@ Use a loop `object_list` and display the object attributes.
 
 ## CREATE VIEW 
 
-### Add AjaxCreateView
+### Add AjaxCreateView in views.py
+
 Utilize a model and form that you've defined in your project.
 
 **views.py**
@@ -144,7 +154,7 @@ class ModelCreate(AjaxCreateView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Add CreateView in urls.py
+### Add ModelCreate in urls.py
 
 In `urls.py`, create paths using the list view you've created.
 
@@ -186,7 +196,7 @@ Make sure that the `event.js` script has been added in template, and don't forge
 <button class="js-create btn btn-success" type="button" data-url="{% url 'js-create-model' %}">New model</button>
 ```
 
-### Create Form Template
+### Create a Form Template
 Under `templates/partials/model/`, add `create.html`.
 
 These template will contain a form with `method="post"`, an `action` pointing to the URL corresponding to the view, and the class `.js-create-form` for referencing this form in `event.js`.
@@ -211,9 +221,10 @@ These template will contain a form with `method="post"`, an `action` pointing to
   </div>
 </form>
 ```
+
 ## UPDATE VIEW 
 
-### Add AjaxUpdateView
+### Add AjaxUpdateView in views.py
 
 Utilize a model and form that you've defined in your project.
 
@@ -230,7 +241,7 @@ class ModelUpdate(AjaxUpdateView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Add UpdateView in urls.py
+### Add ModelUpdate in urls.py
 
 In `urls.py`, create paths using the update view you've created.
 
@@ -248,6 +259,7 @@ urlpatterns = [
   path('js/update/<int:pk>/model/', ModelUpdate.as_view(), name='js-update-model'),
 ]
 ```
+
 ### Add Modal and Update Button
 
 Make sure that you have a ``modal-form`` in the **list template**.
@@ -285,7 +297,8 @@ Add a `data-url` attribute with your **update URL**, referencing `object.pk`.
 {% endfor %}
 ```
 
-### Update Form Template
+### Create a Update Form Template
+
 Under `templates/partials/model/`, add `update.html`
 
 These template will contain a form with `method="post"`, an `action` pointing to the URL corresponding to the view with ``form.instance.pk``, and the``.js-update-form`` class for referencing this form in `event.js`.
@@ -315,7 +328,7 @@ These template will contain a form with `method="post"`, an `action` pointing to
 
 ## DELETE VIEW 
 
-### Add AjaxDeleteView
+### Add AjaxDeleteView in views.py
 
 Utilize a model that you've defined in your project.
 
@@ -330,7 +343,8 @@ class ModelDelete(AjaxDeleteView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Add DeleteView in urls.py
+### Add ModelDelete in urls.py
+
 In `urls.py`, create paths using the delete view you've created.
 
 Remember that delete views require the primary key.
@@ -382,7 +396,7 @@ Add a `data-url` attribute with your **delete URL**, referencing `object.pk`.
 {% endfor %}
 ```
 
-### Delete Form Template
+### Create a Delete Form Template
 Under `templates/partials/model/`, add `delete.html`
 
 These template will contain a form with `method="post"`, an `action` pointing to the URL corresponding to the view with ``object.pk``, and the``.js-delete-form`` class for referencing this form in `event.js`.

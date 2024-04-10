@@ -1,18 +1,23 @@
 # DJANGO CLASS BASED VIEWS PARA CRUD COM AJAX
 
-Este repositório é uma coleção de mixins e views baseadas em classes projetadas para facilitar operações CRUD (Criar, Ler, Atualizar, Deletar) AJAX em projetos Django. Ele permite que os desenvolvedores integrem interações dinâmicas de dados em suas aplicações web sem a necessidade de recarregar a página, melhorando assim a experiência do usuário.
+Este repositório é foi feito com base no problema de dificuldade na criação de Function Based Views do Django para o uso de CRUD's (Criar, Ler, Atualizar, Deletar) com AJAX. 
+
+Neste repositório possui mixins e views criadas com JsonResponse que podem ser processadas por requisições AJAX, permitindo a integração de páginas dinamicas em uma aplicações web. 
 
 ---
 
 **Recursos:**
-- **Mixins AJAX:** Integre facilmente funcionalidades AJAX em views baseadas em classes.
-- **Operações CRUD:** Views prontas para uso para criar, ler, atualizar e deletar itens.
+- **Mixins AJAX:** Funções AJAX que são facilmente adicionadas em Class Based Views.
+
+- **AJAX Views:** Views prontas para uso de CRUD's.
+
 - **Integração Simples:** Projetado para uma configuração e uso simples em qualquer projeto Django.
-- **Documentação:** Inclui instruções completas de configuração e uso.
+
+- **Documentação:** Instruções completas de configuração e uso.
 
 ---
 
-**Começando:** Clone o repositório e siga a documentação para incorporar funcionalidades CRUD AJAX ao seu projeto Django. Melhore a interatividade e o desempenho da sua aplicação web com esta solução amigável ao usuário.
+**Começando:** Clone o repositório e siga a documentação para incorporar funcionalidades CRUD AJAX ao seu projeto Django.
 
 ## COMO USAR
 
@@ -55,7 +60,7 @@ Copie os seguintes arquivos deste repositório para o seu projeto:
 
 ## LIST VIEW
 
-### Adicione AjaxListView
+### Adicione AjaxListView em views.py
 
 Utilize um modelo definido no seu projeto. Em `ModelList`, defina o modelo, template e template parcial para listagem de objetos.
 
@@ -70,7 +75,7 @@ class ModelList(AjaxListView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Adicione ListView em urls.py
+### Adicione ModelList em urls.py
 
 Crie caminhos usando a list view que você criou em `urls.py`, assegurando nomes de caminhos descritivos para evitar conflitos.
 
@@ -84,9 +89,13 @@ urlpatterns = [
 ]
 ```
 
-### Criando Template de Lista de Modelos
+### Criando Template de ModelList
 
-Crie `model/model-list.html` no seu diretório `templates`. Adicione uma tabela com `id="partial-table"`, e inclua a lista parcial no tbody. Inclua o script `event.js` e utilize `{% load static %}` para funcionamento adequado.
+Crie `model/model-list.html` no seu diretório `templates`.
+
+Adicione uma tabela com `id="partial-table"`, e inclua a lista parcial no tbody. 
+ 
+Inclua o script `event.js` e utilize `{% load static %}` para funcionamento adequado.
 
 **model-list.html**
 ```html
@@ -104,7 +113,7 @@ Crie `model/model-list.html` no seu diretório `templates`. Adicione uma tabela 
 {% endblock script %}
 ```
 
-### Criando Lista Parcial de Modelos
+### Criando Parcial List de Model
 
 Crie `partials/model/list.html` no seu diretório `templates`. 
 
@@ -122,7 +131,7 @@ Use um loop de `object_list` e exibir os atributos do objeto.
 
 ## CREATE VIEW
 
-### Adicione AjaxCreateView
+### Adicione AjaxCreateView em views.py
 
 Utilize um modelo e formulário definidos no seu projeto.
 
@@ -139,7 +148,7 @@ class ModelCreate(AjaxCreateView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Adicione CreateView em urls.py
+### Adicione ModelCreate em urls.py
 
 Crie caminhos usando a view de criação que você definiu em `urls.py`, assegurando nomes de caminhos descritivos.
 
@@ -154,7 +163,7 @@ urlpatterns = [
 ]
 ```
 
-### Adicione Formulário Modal e Botão de Criação
+### Adicione o Modal e Botão de Create
 
 No template de lista, adicione um modal com `id="model-form"`, e inclua um botão com a classe `.js-create` para criar um novo objeto. 
 
@@ -177,11 +186,13 @@ Certifique-se de que o script `event.js` está adicionado e use `{% load static 
 <button class="js-create btn btn-success" type="button" data-url="{% url 'js-create-model' %}">New model</button>
 ```
 
-### Crie Template de Formulário
+### Crie um Template de Formulário
 
-Sob `templates/partials/model/`, adicione `create.html` 
+Em `templates/partials/model/`, adicione `create.html` 
 
-Esse template deve conter um formulário com `method="post"` e uma `action` apontando para a URL correspondente à view. Adicione a classe `.js-create-form` para referenciar este formulário em `event.js`.
+Esse template deve conter um formulário com `method="post"` e uma `action` apontando para a URL correspondente à view. 
+
+Adicione a classe `.js-create-form` para referenciar este formulário em `event.js`.
 
 **create.html**
 ```html
@@ -206,7 +217,7 @@ Esse template deve conter um formulário com `method="post"` e uma `action` apon
 
 ## UPDATE VIEW
 
-### Adicione AjaxUpdateView
+### Adicione AjaxUpdateView em views.py
 
 Utilize um modelo e formulário definidos no seu projeto.
 
@@ -223,7 +234,7 @@ class ModelUpdate(AjaxUpdateView):
     partial_list = 'partials/model/list.html'
 ```
 
-### Adicione UpdateView em urls.py
+### Adicione ModelUpdate em urls.py
 
 Crie caminhos usando a view de atualização que você definiu em `urls.py`, assegurando nomes de caminhos descritivos.
 
@@ -238,7 +249,7 @@ urlpatterns = [
 ]
 ```
 
-### Adicione Modal e Botão de Atualização
+### Adicione o Modal e Botão de Update
 
 Certifique-se de que um `modal-form` está no template de lista. 
 
@@ -256,7 +267,9 @@ Certifique-se de que o script `event.js` está adicionado e use `{% load static 
 </div>
 ```
 
-Inclua um botão de atualização com a classe `.js-update` no template de lista parcial. Adicione um atributo `data-url` com a sua URL de atualização, referenciando `object.pk`. 
+Inclua um botão de atualização com a classe `.js-update` no template de lista parcial. 
+
+Adicione um atributo `data-url` com a sua URL de atualização, referenciando `object.pk`. 
 
 **list.html**
 ```html
@@ -273,9 +286,13 @@ Inclua um botão de atualização com a classe `.js-update` no template de lista
 {% endfor %}
 ```
 
-### Crie Template de Formulário de Atualização
+### Crie um Template de Formulário Update
 
-Sob `templates/partials/model/`, adicione `update.html` contendo um formulário com `method="post"` e uma `action` apontando para a URL correspondente à view com `form.instance.pk`. Adicione a classe `.js-update-form` para referenciar este formulário em `event.js`.
+Em `templates/partials/model/`, adicione `update.html`.
+
+Esse template deve conter um formulário com `method="post"` e uma `action` apontando para a URL correspondente à view com `form.instance.pk`. 
+
+Adicione a classe `.js-update-form` para referenciar este formulário em `event.js`.
 
 **update.html**
 ```html
@@ -302,7 +319,7 @@ Sob `templates/partials/model/`, adicione `update.html` contendo um formulário 
 
 ## DELETE VIEW
 
-### Adicione AjaxDeleteView
+### Adicione AjaxDeleteView em views.py
 
 Utilize um modelo definido no seu projeto.
 
@@ -332,7 +349,7 @@ urlpatterns = [
 ]
 ```
 
-### Adicione Modal e Botão de Deleção
+### Adicione o Modal e Botão de Delete
 
 Certifique-se de que um `modal-form` está no template de lista. 
 
@@ -369,9 +386,11 @@ Adicione um atributo `data-url` com a sua URL de deleção, referenciando `objec
 {% endfor %}
 ```
 
-### Crie Template de Formulário de Deleção
+### Crie um Template de Formulário Delete
 
-Sob `templates/partials/model/`, adicione `delete.html` contendo um formulário com `method="post"` e uma `action` apontando para a URL correspondente à view com `object.pk`. 
+Em `templates/partials/model/`, adicione `delete.html`.
+
+Esse template deve conter um formulário com `method="post"` e uma `action` apontando para a URL correspondente à view com `object.pk`. 
 
 Adicione a classe `.js-delete-form` para referenciar este formulário em `event.js`.
 
