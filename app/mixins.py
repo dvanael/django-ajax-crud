@@ -46,6 +46,7 @@ class AjaxResponseMixin(ContextMixin, PaginateMixin):
     object_list = 'object_list'
     model = None
     template_name = None
+    success_message = None
 
     def ajax_response(self, form=None, object_list=None, context=None, template_name=None, paginate_by=None, success_url=None):
         """
@@ -57,6 +58,8 @@ class AjaxResponseMixin(ContextMixin, PaginateMixin):
             data['form_is_valid'] = form.is_valid()
             if success_url:
                 data['success_url'] = success_url
+            if self.success_message:
+                data['success_message'] = self.success_message
 
         if object_list:
             if paginate_by:
@@ -114,4 +117,6 @@ class DeleteReponseMixin(AjaxResponseMixin):
         """
         data = {'form_is_valid': True}
         data['success_url'] = self.success_url
+        if self.success_message:
+            data['success_message'] = self.success_message
         return JsonResponse(data)

@@ -27,6 +27,9 @@ $(function(){
                         loadList(data.success_url)
                     }
                     $("#modal-form").modal("hide");
+                    if(data.success_message){
+                        addMessage(data.success_message)
+                    }
                 }
                 else{
                     $("#modal-form .modal-content").html(data.html_form)
@@ -49,7 +52,6 @@ $(function(){
                 }
                 if ($('#filter-form').length > 0){
                     $('#filter-form')[0].reset()
-                    // filter($('#filter-form'))
                 }
             }
         });
@@ -90,6 +92,12 @@ $(function(){
         return false
     };
  
+    function addMessage(text){
+        var alert = $('<div class="alert alert-warning alert-dismissible fade show fw-bold" role="alert">' + text + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+
+        if ($('#message').length) {$('#message').append(alert)}
+    }
+
     // CREATE
     $(".js-create").click(loadForm);
     $("#modal-form").on("submit", ".js-create-form", saveForm);
@@ -111,8 +119,7 @@ $(function(){
 
     // BTN RESET FILTER 
     $('.btn-reset').on("click", function() {
-        $('#filter-form')[0].reset()
-        filter($('#filter-form'))
+        loadList('?')
     });
 
 });

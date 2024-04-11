@@ -50,6 +50,7 @@ class BookCreate(AjaxCreateView):
     form_class = BookForm
     template_name = 'partials/book/create.html'
     success_url = reverse_lazy('book-list')
+    success_message = 'Book has been ADDED!'
 
     def form_valid(self, form):
         form.instance.user = get_object_or_404(User, id=self.request.user.id) 
@@ -59,6 +60,7 @@ class BookUpdate(AjaxUpdateView):
     form_class = BookForm
     template_name = 'partials/book/update.html'
     success_url = reverse_lazy('book-list')
+    success_message = 'Book has been UPDATED!'
 
 class BookStatusUpdate(AjaxUpdateView):
     form_class = BookStatusForm
@@ -69,6 +71,7 @@ class BookDelete(AjaxDeleteView):
     model = Book
     template_name = 'partials/book/delete.html'
     success_url = reverse_lazy('book-list')
+    success_message = 'Book has been DELETED!'
  
 # Genre's CRUD
 class GenreList(AjaxListView):
