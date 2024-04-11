@@ -66,12 +66,14 @@ class AjaxUpdateView(AjaxFormView):
     View to update an existing object using AJAX.
     """
     def get(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(self.model, pk=pk)
+        model = self.form_class._meta.model
+        instance = get_object_or_404(model, pk=pk)
         form = self.form_class(instance=instance)
         return self.render_form(form)
 
     def post(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(self.model, pk=pk)
+        model = self.form_class._meta.model
+        instance = get_object_or_404(model, pk=pk)
         form = self.form_class(request.POST, instance=instance)
         return self.form_valid(form)
 

@@ -23,15 +23,10 @@ $(function(){
             dataType: 'json',
             success: function(data){
                 if(data.form_is_valid){
-                    $("#partial-table tbody").html(data.html_list);
+                    if(data.success_url){
+                        loadList(data.success_url)
+                    }
                     $("#modal-form").modal("hide");
-                    if(data.html_pagination){
-                        $("#partial-page").html(data.html_pagination);
-                    }
-                    if ($('#filter-form').length > 0){
-                        $('#filter-form')[0].reset()
-                        filter($('#filter-form'))
-                    }
                 }
                 else{
                     $("#modal-form .modal-content").html(data.html_form)
@@ -39,6 +34,25 @@ $(function(){
             }
         });
         return false
+    };
+
+    var loadList = function(url) {
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            headers: { 'header': 'ajax' },
+            success: function(data) {
+                $('#partial-table tbody').html(data.html_list);
+                if (data.html_pagination) {
+                    $('#partial-page').html(data.html_pagination);
+                }
+                if ($('#filter-form').length > 0){
+                    $('#filter-form')[0].reset()
+                    // filter($('#filter-form'))
+                }
+            }
+        });
     };
 
     var filter = function(){
@@ -50,7 +64,6 @@ $(function(){
             dataType: 'json',
             headers:{ 'header': 'ajax'},
             success: function(data){
-                console.log(data.html_list)
                 $('#partial-table tbody').html(data.html_list);
                 if (data.html_pagination){
                     $('#partial-page').html(data.html_pagination);
