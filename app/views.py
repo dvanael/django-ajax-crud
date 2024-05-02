@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-from .ajax import AjaxListView, AjaxCreateView, AjaxUpdateView, AjaxDeleteView
+from ajax.views import AjaxListView, AjaxCreateView, AjaxUpdateView, AjaxDeleteView
 from .forms import BookForm, BookStatusForm, GenreForm
 from .models import Book, Genre
 
@@ -53,7 +53,13 @@ class BookCreate(AjaxCreateView):
     success_message = 'Book has been ADDED!'
 
     def form_valid(self, form):
-        form.instance.user = get_object_or_404(User, id=self.request.user.id) 
+        user = self.request.user
+        if not user.is_authenticated:
+            form.instance.user = None
+
+        if user.is_authenticated:
+            form.instance.user = get_object_or_404(User, id=self.request.user.id) 
+
         return super().form_valid(form)
     
 class BookUpdate(AjaxUpdateView):
@@ -66,6 +72,7 @@ class BookStatusUpdate(AjaxUpdateView):
     form_class = BookStatusForm
     template_name = 'partials/book/update-status.html'
     success_url = reverse_lazy('book-list')
+    success_message = 'Book STATUS has been UPDATED'
 
 class BookDelete(AjaxDeleteView):
     model = Book
@@ -78,6 +85,7 @@ class GenreList(AjaxListView):
     model = Genre
     object_list = 'genre'
     template_name = 'genre/list.html'
+    partial_list = 'partials/genre/list.html'
     paginate_by = 5
 
     def get_queryset(self):

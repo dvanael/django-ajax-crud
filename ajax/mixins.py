@@ -1,7 +1,7 @@
-from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+
 
 class PaginateMixin:
     """
@@ -27,6 +27,7 @@ class PaginateMixin:
 
         return object_list
 
+
 class ContextMixin:
     """
     Provides a basic context mixin that can be extended to include additional context for templates.
@@ -39,6 +40,7 @@ class ContextMixin:
         context = {}
         return context
 
+
 class AjaxResponseMixin(ContextMixin, PaginateMixin):
     """
     Mixin to handle AJAX responses, providing methods for returning JSON responses.
@@ -46,7 +48,8 @@ class AjaxResponseMixin(ContextMixin, PaginateMixin):
     object_list = 'object_list'
     model = None
     template_name = None
-    success_message = None
+    message = None
+    message_class = None
 
     def ajax_response(self, form=None, object_list=None, context=None, template_name=None, paginate_by=None, success_url=None):
         """
@@ -58,8 +61,9 @@ class AjaxResponseMixin(ContextMixin, PaginateMixin):
             data['form_is_valid'] = form.is_valid()
             if success_url:
                 data['success_url'] = success_url
-            if self.success_message:
-                data['success_message'] = self.success_message
+            if self.message:
+                data['message'] = self.message
+                data['message_class'] =  self.message_class
 
         if object_list:
             if paginate_by:
@@ -67,7 +71,8 @@ class AjaxResponseMixin(ContextMixin, PaginateMixin):
                 context['page'] = context[f'{self.object_list}'] = object_list
                 data['html_pagination'] = render_to_string(self.partial_pagination, context)
             
-            data['html_list'] = render_to_string(self.partial_list, {f'{self.object_list}': object_list})
+            context[f'{self.object_list}'] = object_list
+            data['html_list'] = render_to_string(self.partial_list, context)
         return JsonResponse(data)
     
     def get_queryset(self):
@@ -97,6 +102,7 @@ class FormResponseMixin(AjaxResponseMixin):
         """
         return self.ajax_response(form=form, template_name=self.template_name)
 
+
 class DeleteReponseMixin(AjaxResponseMixin):
     """
     Mixin to handle AJAX responses for delete operations.
@@ -117,6 +123,8 @@ class DeleteReponseMixin(AjaxResponseMixin):
         """
         data = {'form_is_valid': True}
         data['success_url'] = self.success_url
-        if self.success_message:
-            data['success_message'] = self.success_message
+        if self.message:
+            data['message'] = self.message
+            data['message_class'] =  self.message_class
+
         return JsonResponse(data)
